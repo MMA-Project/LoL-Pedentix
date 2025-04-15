@@ -3,10 +3,29 @@ import { v4 as uuidv4 } from "uuid";
 import { exampleLeaguePedantix } from "../models/LeaguePedantix";
 import Game from "../models/Game";
 import { getMaskedText } from "../utils/words";
+import path from "path";
+import fs from "fs";
 
 const router = express.Router();
 
-const games: Record<string, Game> = {};
+const GAMES_DIR = path.join(__dirname, "..", "data", "games");
+
+if (!fs.existsSync(GAMES_DIR)) {
+    fs.mkdirSync(GAMES_DIR, { recursive: true });
+}
+
+const getGameFilePath = (id: string) => path.join(GAMES_DIR, `${id}.json`);
+
+const saveGameToFile = (game: Game) => {
+    fs.writeFileSync(getGameFilePath(game.id), JSON.stringify(game, null, 2), "utf-8");
+};
+
+const loadGameFromFile = (id: string): Game | null => {
+    const filePath = getGameFilePath(id);
+    if (!fs.existsSync(filePath)) return null;
+    const content = fs.readFileSync(filePath, "utf-8");
+    return JSON.parse(content);
+};
 
 router.get("/start", (req, res) => {
     const seed = new Date().toISOString().slice(0, 10);
@@ -21,7 +40,7 @@ router.get("/start", (req, res) => {
         foundWords: [],
     };
 
-    games[gameId] = game;
+    saveGameToFile(game);
 
     res.json({
         gameId,
@@ -30,11 +49,12 @@ router.get("/start", (req, res) => {
     });
 });
 
+
 router.post("/guess/:id", (req, res) => {
     const { id } = req.params;
     const { word } = req.body;
 
-    const game = games[id];
+    const game = loadGameFromFile(id);
     if (!game) {
         res.status(404).send("Game not found");
         return;
@@ -49,6 +69,8 @@ router.post("/guess/:id", (req, res) => {
 
     if (game.rawText.toLowerCase().includes(wordLower)) {
         game.foundWords.push(wordLower);
+        saveGameToFile(game);
+
         res.json({
             correct: true,
             maskedText: getMaskedText(game.rawText, game.foundWords),
@@ -62,5 +84,6 @@ router.post("/guess/:id", (req, res) => {
         maskedText: getMaskedText(game.rawText, game.foundWords),
     });
 });
+
 
 export default router;

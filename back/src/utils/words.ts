@@ -1,18 +1,8 @@
-const normalize = (s: string) =>
-    s
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
-
-export const getMaskedText = (raw: string, found: string[]) => {
-    return raw
-        .split(/(\b)/)
-        .map((word) => {
-            const clean = normalize(word);
-            const isWord = /\w+/.test(word);
-            return isWord && !found.includes(clean)
-                ? "_".repeat(word.length)
-                : word;
-        })
-        .join("");
-};
+export function getMaskedText(text: string, foundWords: string[]): string {
+    const foundSet = new Set(foundWords.map(w => w.toLowerCase()));
+    
+    return text.replace(/\b[\p{L}]+(?:'[\p{L}]+)*\b/gu, (word) => {
+        const cleanedWord = word.toLowerCase();
+        return foundSet.has(cleanedWord) ? word : word.replace(/\p{L}/gu, '●');
+    });
+}
