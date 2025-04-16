@@ -9,9 +9,15 @@ app.use(express.json());
 
 const PORT = 3001;
 
+// Middleware for tracing requests
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
+
 // Game routes
 app.use("/api/game", gameRouter);
 
 app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-  });
+  console.log(`Server running at http://localhost:${PORT}`);
+});
