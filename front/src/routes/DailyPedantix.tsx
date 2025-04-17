@@ -7,7 +7,6 @@ export default function DailyPedantix() {
   const [word, setWord] = useState<string>("");
 
   const handleGuess = async () => {
-    console.log("handleGuess", word);
     if (!word || !data) return;
     const response = await submitGuess(data.gameId, word);
     updateData(response);

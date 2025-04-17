@@ -12,7 +12,6 @@ export function getMaskedText(text: string, foundWords: string[]): string {
     // Si le mot contient une apostrophe, on gère l'apostrophe séparément
     if (word.includes("'")) {
       const parts = word.split("'");
-      console.log(parts);
       // Masque les lettres des deux parties du mot séparées par l'apostrophe
       const maskedParts = parts.map((part) =>
         foundSet.has(part.toLowerCase()) ? part : part.replace(/[\p{L}]/gu, "●")
