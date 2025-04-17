@@ -123,7 +123,7 @@ router.post("/guess/:id", (req, res) => {
 
   res.json({
     correct,
-    id: game.id,
+    gameId: game.id,
     seed: game.seed,
     guessed: game.guessed,
     text: getMaskedText(game.rawText, game.foundWords),
