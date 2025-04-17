@@ -21,15 +21,29 @@ export default function DailyPedantix() {
         backgroundImage: data?.image ? `url(${data.image})` : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
       }}
     >
-      <div className="bg-gray-900 text-white p-8 rounded-2xl shadow-lg w-full max-w-6xl">
-        <div className="bg-gray-800 text-3xl font-bold px-6 py-3 rounded-lg mb-8 text-center">
+      <div className="text-white p-8 rounded-2xl shadow-lg w-full max-w-6xl">
+        <div
+          className="text-3xl font-bold px-6 py-3 rounded-lg mb-8 text-center"
+          style={{
+            backgroundColor: "#1e2328ee",
+            border: "2px solid #af9767",
+          }}
+        >
           League of Legends Pétendix
         </div>
 
         {data && (
-          <div className="bg-gray-800 p-8 rounded-2xl">
+          <div
+            className="p-8 rounded-2xl"
+            style={{
+              backgroundColor: "#1e2328ee",
+              border: "2px solid #af9767",
+            }}
+          >
             <div className="text-lg mb-4">
               {data.guessed
                 ? "Bravo, vous avez trouvé le champion !"
@@ -52,8 +66,19 @@ export default function DailyPedantix() {
               </form>
             )}
             {data.title ? (
-              <div className=" text-4xl">
-                {data.title.charAt(0).toUpperCase() + data.title.slice(1)}
+              <div className="flex items-center space-x-4 py-4">
+                {data.image && (
+                  <img
+                    src={`https://ddragon.leagueoflegends.com/cdn/15.8.1/img/champion/${
+                      data.title.charAt(0).toUpperCase() + data.title.slice(1)
+                    }.png`}
+                    alt={data.title}
+                    className="w-32 h-32 shadow-lg"
+                  />
+                )}
+                <div className="text-4xl text-center">
+                  {data.title.charAt(0).toUpperCase() + data.title.slice(1)}
+                </div>
               </div>
             ) : (
               <div className=" w-32 h-8 bg-white rounded"></div>
