@@ -1,15 +1,15 @@
-import { createBrowserRouter } from "react-router";
+import { createHashRouter } from "react-router";
 import DailyPedantix from "./DailyPedantix";
 import Home from "./Home";
 import { DailyPedantixProvider } from "../context/DailyPedantixContext";
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
-    path: "/LoL-Pedentix/",
+    path: "/",
     element: <Home />,
   },
   {
-    path: "/LoL-Pedentix/daily",
+    path: "/daily",
     element: (
       <DailyPedantixProvider>
         <DailyPedantix />
