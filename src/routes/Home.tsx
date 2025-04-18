@@ -4,16 +4,37 @@ export const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="home-container">
-      <h1>Bienvenue sur Pedantix</h1>
-      <p>Choisissez votre mode de jeu :</p>
-      <div className="button-container">
-        <button onClick={() => navigate("daily")} className="home-button">
-          Daily
-        </button>
-        <button onClick={() => navigate("/1v1")} className="home-button">
-          1V1
-        </button>
+    <div className="px-4 flex flex-col items-center">
+      <h1 className=" text-white text-xl mb-4">
+        Devine des champions de League of Legends
+      </h1>
+      <div className="flex flex-col items-center mb-4 gap-4">
+        <div className="relative flex flex-col clickable">
+          <img
+            src="./src/assets/ButtonEmpty.webp"
+            alt="select daily"
+            className="h-20 "
+            onClick={() => navigate("daily")}
+          />
+          <div className="absolute left-26 top-2 text-white text-3xl">
+            Daily
+          </div>
+          <div className="absolute left-26 bottom-5 text-white text-sm">
+            Trouver le champion avec son histoire
+          </div>
+        </div>
+        <div className="relative flex flex-col clickable">
+          <img
+            src="./src/assets/ButtonEmpty.webp"
+            alt="select daily"
+            className="h-20 "
+            onClick={() => navigate("daily")}
+          />
+          <div className="absolute left-26 top-2 text-white text-3xl">1vs1</div>
+          <div className="absolute left-26 bottom-5 text-white text-sm">
+            Affrontement avec un autre joueur
+          </div>
+        </div>
       </div>
     </div>
   );

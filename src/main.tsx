@@ -1,8 +1,10 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { RouterProvider } from "react-router";
-import { router } from "./routes/routes";
+import { HashRouter as Router } from "react-router";
+import { Layout } from "./layout";
 
 createRoot(document.getElementById("root")!).render(
-  <RouterProvider router={router} />
+  <Router>
+    <Layout />
+  </Router>
 );

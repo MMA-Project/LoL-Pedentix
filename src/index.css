@@ -1,8 +1,18 @@
 @import "tailwindcss";
 
 body {
-background: url(https://loldle.net/img/WallpaperDark.20d3d6f6.webp) no-repeat 50% fixed;
-background-color: rgba(0, 0, 0, 0);
-background-size: cover;
-background-color: #000;
+    background: url(https://loldle.net/img/WallpaperDark.20d3d6f6.webp) no-repeat 50% fixed;
+    background-color: rgba(0, 0, 0, 0);
+    background-size: cover;
+    background-color: #000;
+}
+
+.clickable {
+    cursor: pointer;
+    scale: 1;
+    transition: all 0.3s ease-in-out;
+}
+
+.clickable:hover {
+    scale: 1.05; /* Adjust the scale value as needed */
 }
