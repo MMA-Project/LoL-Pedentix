@@ -80,7 +80,7 @@ export default function DailyPedantix() {
                 </div>
               </div>
             ) : (
-              <div className=" w-32 h-8 bg-white rounded"></div>
+              <div className=" w-32 h-8 bg-white rounded my-4"></div>
             )}
             {data.text.split("\n").map((line, lineIndex) => (
               <div key={lineIndex} className="mb-2">
