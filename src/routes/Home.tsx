@@ -9,7 +9,7 @@ export const Home = () => {
       <p>Choisissez votre mode de jeu :</p>
       <div className="button-container">
         <button
-          onClick={() => navigate("/LoL-Pedantix/daily")}
+          onClick={() => navigate("/LoL-Pedentix/daily")}
           className="home-button"
         >
           Daily

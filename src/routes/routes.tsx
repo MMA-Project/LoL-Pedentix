@@ -5,11 +5,11 @@ import { DailyPedantixProvider } from "../context/DailyPedantixContext";
 
 export const router = createBrowserRouter([
   {
-    path: "/LoL-Pedantix/",
+    path: "/LoL-Pedentix/",
     element: <Home />,
   },
   {
-    path: "/LoL-Pedantix/daily",
+    path: "/LoL-Pedentix/daily",
     element: (
       <DailyPedantixProvider>
         <DailyPedantix />
