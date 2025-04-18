@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import selectImage from "../assets/ButtonEmpty.webp";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -13,11 +14,7 @@ export const Home = () => {
           className="relative flex flex-col clickable"
           onClick={() => navigate("daily")}
         >
-          <img
-            src="./src/assets/ButtonEmpty.webp"
-            alt="select daily"
-            className="h-20 "
-          />
+          <img src={selectImage} alt="select daily" className="h-20 " />
           <div className="absolute left-26 top-2 text-white text-3xl">
             Daily
           </div>
@@ -29,11 +26,7 @@ export const Home = () => {
           className="relative flex flex-col clickable"
           onClick={() => navigate("1vs1")}
         >
-          <img
-            src="./src/assets/ButtonEmpty.webp"
-            alt="select 1vs1"
-            className="h-20 "
-          />
+          <img src={selectImage} alt="select 1vs1" className="h-20 " />
           <div className="absolute left-26 top-2 text-white text-3xl">1vs1</div>
           <div className="absolute left-26 bottom-5 text-white text-sm">
             Affrontement avec un autre joueur

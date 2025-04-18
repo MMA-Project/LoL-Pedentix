@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router";
+import Image404 from "../assets/404.webp";
 
 export const Page404 = () => {
   const navigate = useNavigate();
   return (
     <div className="p-4 flex flex-col items-center">
       <img
-        src="./src/assets/404.webp"
+        src={Image404}
         alt="404"
         className="w-64 mb-4 clickable"
         onClick={() => navigate("/")}
