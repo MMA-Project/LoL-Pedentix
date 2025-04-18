@@ -8,7 +8,10 @@ export const Home = () => {
       <h1>Bienvenue sur Pedantix</h1>
       <p>Choisissez votre mode de jeu :</p>
       <div className="button-container">
-        <button onClick={() => navigate("/daily")} className="home-button">
+        <button
+          onClick={() => navigate("/LoL-Pedantix/daily")}
+          className="home-button"
+        >
           Daily
         </button>
         <button onClick={() => navigate("/1v1")} className="home-button">
