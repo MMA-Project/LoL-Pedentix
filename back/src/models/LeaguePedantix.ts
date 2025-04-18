@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+import puppeteer from "puppeteer";
 
 export interface LeaguePedantixModel {
   name: string;
@@ -22,11 +23,25 @@ export const getLeaguePedantixfromSeed = async (
   const name = champions[Math.floor(seededRandom(seed) * champions.length)];
   const url = `https://universe.leagueoflegends.com/fr_FR/story/champion/${name}/`;
 
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+  await page.goto(url, {
+    waitUntil: "networkidle0",
+  });
+
   const { data: html } = await axios.get<string>(url);
   const $ = cheerio.load(html);
 
-  const text = $('meta[name="description"]').attr("content") ?? "";
-  const image = $('meta[property="og:image:url"]').attr("content") ?? "";
+  const text = await page.$$eval(".p_1_sJ", (elements) =>
+    elements.map((el) => el.textContent?.trim()).join(" \n")
+  );
+
+  const image = await page.$eval(".image_3oOd", (el) => {
+    const style = el.getAttribute("style") || "";
+    const match = style.match(/url\(['"]?(.*?)['"]?\)/);
+    return match ? match[1] : "";
+  });
 
   return new LeaguePedantix(name, image, text);
 };

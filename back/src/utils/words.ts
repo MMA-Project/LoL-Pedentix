@@ -1,13 +1,26 @@
 export function getMaskedText(text: string, foundWords: string[]): string {
   const foundSet = new Set(foundWords.map((w) => w.toLowerCase()));
 
-  return text
-    .split(/(\b[\wÀ-ÿ']+\b)/g)
-    .map((part) => {
-      const cleaned = part.toLowerCase();
-      if (foundSet.has(cleaned)) return part;
+  return text.replace(/\b[\p{L}]+(?:'[\p{L}]+)*\b/gu, (word) => {
+    const cleanedWord = word.toLowerCase();
 
-      return /\b[\wÀ-ÿ']+\b/.test(part) ? "●".repeat(part.length) : part;
-    })
-    .join("");
+    // Vérifie si le mot est trouvé dans la liste des mots
+    if (foundSet.has(cleanedWord)) {
+      return word;
+    }
+
+    // Si le mot contient une apostrophe, on gère l'apostrophe séparément
+    if (word.includes("'")) {
+      const parts = word.split("'");
+      // Masque les lettres des deux parties du mot séparées par l'apostrophe
+      const maskedParts = parts.map((part) =>
+        foundSet.has(part.toLowerCase()) ? part : part.replace(/[\p{L}]/gu, "●")
+      );
+      // Réassemble avec l'apostrophe
+      return maskedParts.join("'");
+    } else {
+      // Sinon, masque tout le mot
+      return word.replace(/[\p{L}]/gu, "●");
+    }
+  });
 }
