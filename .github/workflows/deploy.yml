@@ -16,22 +16,18 @@ jobs:
 
       - name: Setup Node
         uses: actions/setup-node@v3
-        with:
-          node-version: 18 # or whatever version you need
 
       - name: Install dependencies
-        working-directory: ./front
-        run: npm install
+        uses: bahmutov/npm-install@v1
 
       - name: Build project
-        working-directory: ./front
         run: npm run build
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v3
         with:
           name: production-files
-          path: ./front/dist
+          path: ./dist
 
   deploy:
     name: Deploy
