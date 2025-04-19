@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from "react-router";
 import { Layout } from "./layout";
 
 createRoot(document.getElementById("root")!).render(
-  <Router basename="/LoL-Pedentix/">
+  <Router basename="/LoL-Pedentix">
     <Layout />
   </Router>
 );
