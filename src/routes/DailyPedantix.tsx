@@ -14,17 +14,19 @@ export default function DailyPedantix() {
   };
 
   return (
-    <div
-      className="min-h-screen p-4 flex items-center justify-center"
-      style={{
-        backgroundImage: data?.image ? `url(${data.image})` : undefined,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundAttachment: "fixed",
-      }}
-    >
-      <div className="text-white p-8 rounded-2xl shadow-lg w-full max-w-6xl">
+    <div className="min-h-screen p-4 flex items-center justify-center">
+      <div
+        className="top-0 left-0 w-full h-full bg-cover bg-center fixed"
+        style={{
+          backgroundImage: data?.image ? `url(${data.image})` : undefined,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          zIndex: -1,
+        }}
+      />
+
+      <div className="text-white p-8 rounded-2xl shadow-lg w-full max-w-6xl animate-fade animate-ease-in-out">
         <div
           className="text-3xl font-bold px-6 py-3 rounded-lg mb-8 text-center"
           style={{

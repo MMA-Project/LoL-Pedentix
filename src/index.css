@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tailwindcss-animated";
 
 body {
     background: url(https://loldle.net/img/WallpaperDark.20d3d6f6.webp) no-repeat 50% fixed;

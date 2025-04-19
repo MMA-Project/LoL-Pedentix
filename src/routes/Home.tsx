@@ -5,8 +5,8 @@ export const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="px-4 flex flex-col items-center">
-      <h1 className=" text-white text-xl mb-4">
+    <div className="px-4 flex flex-col items-center animate-fade animate-ease-in-out">
+      <h1 className="text-white text-xl mb-4">
         Devine des champions de League of Legends
       </h1>
       <div className="flex flex-col items-center mb-4 gap-4">

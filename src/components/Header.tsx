@@ -4,7 +4,7 @@ import logo from "../assets/logo.png";
 export const Header = ({ larger = false }) => {
   const navigate = useNavigate();
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center z-20">
       <img
         src={logo}
         alt="Logo"
