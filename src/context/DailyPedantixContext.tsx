@@ -12,7 +12,7 @@ interface DailyPedantixData {
   seed: string;
   guessed: boolean;
   text: string;
-  foundWords: string[];
+  triedWords: string[];
   image?: string;
   title?: string;
 }
