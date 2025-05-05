@@ -87,11 +87,31 @@ export default function DailyPedantix() {
             {data.text.split("\n").map((line, lineIndex) => (
               <div key={lineIndex} className="mb-2">
                 {line
-                  .match(/([●’'\wÀ-ÿ]+|[.,!?;:]|\s+)/g)
+                  .match(/(\[.*?\]|[●’'\wÀ-ÿ]+|[.,!?;:]|\s+)/g)
                   ?.map((token, index) => {
+                    // Cas d'un mot entre crochets
+                    if (token.startsWith("[") && token.endsWith("]")) {
+                      const cleanToken = token.slice(1, -1); // enlever les crochets
+                      return (
+                        <span
+                          key={index}
+                          className="inline-block align-baseline mx-[2px]"
+                        >
+                          <div
+                            className="relative inline-block h-4 bg-white rounded align-baseline items-center justify-center"
+                            style={{ width: `${cleanToken.length * 10}px` }}
+                          >
+                            <span className="absolute text-gray-800 text-sm top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                              {cleanToken}
+                            </span>
+                          </div>
+                        </span>
+                      );
+                    }
+
+                    // Cas des mots avec des ●
                     if (token.includes("●")) {
-                      // On veut savoir si une apostrophe est au milieu
-                      const parts = token.split(/(['’])/); // garde l’apostrophe comme un token
+                      const parts = token.split(/(['’])/); // garde l’apostrophe
 
                       return (
                         <span
@@ -102,7 +122,7 @@ export default function DailyPedantix() {
                             part.includes("●") ? (
                               <div
                                 key={i}
-                                className="inline-block h-3.5 bg-white rounded align-baseline"
+                                className="inline-block h-4 bg-white rounded align-baseline"
                                 style={{
                                   width: `${part.length * 8}px`,
                                   marginLeft: i > 0 ? "2px" : 0,
@@ -116,7 +136,7 @@ export default function DailyPedantix() {
                       );
                     }
 
-                    // Sinon, texte normal ou ponctuation ou espace
+                    // Sinon, texte normal
                     return <span key={index}>{token}</span>;
                   })}
               </div>
