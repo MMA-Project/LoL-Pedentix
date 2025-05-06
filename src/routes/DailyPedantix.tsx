@@ -6,16 +6,19 @@ import { SidePanel } from "../components/SidePanel";
 export default function DailyPedantix() {
   const { data, updateData } = useDailyPedantix();
   const [word, setWord] = useState<string>("");
+  const [lastTriedWord, setLastTriedWord] = useState<string>("");
 
   const handleGuess = async () => {
     if (!word || !data) return;
-    const response = await submitGuess(data.gameId, word);
-    if (response.error) {
+    try {
+      const response = await submitGuess(data.gameId, word);
+      updateData(response);
+      setLastTriedWord(word);
+      setWord("");
+    } catch (error) {
       const newData = await fetchDailyGame();
       updateData(newData);
     }
-    updateData(response);
-    setWord("");
   };
 
   return (
@@ -108,7 +111,16 @@ export default function DailyPedantix() {
                               className="relative inline-block h-4 bg-white rounded align-baseline items-center justify-center"
                               style={{ width: `${cleanToken.length * 10}px` }}
                             >
-                              <span className="absolute text-gray-800 text-sm top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                              <span
+                                className="absolute text-gray-800 text-sm top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                                style={{
+                                  color:
+                                    cleanToken.toLowerCase() ===
+                                    lastTriedWord.toLowerCase()
+                                      ? "#FF8C00" // A more visible orange
+                                      : "",
+                                }}
+                              >
                                 {cleanToken}
                               </span>
                             </div>
@@ -144,7 +156,20 @@ export default function DailyPedantix() {
                       }
 
                       // Sinon, texte normal
-                      return <span key={index}>{token}</span>;
+                      return (
+                        <span
+                          key={index}
+                          style={{
+                            color:
+                              token.toLowerCase() ===
+                              lastTriedWord.toLowerCase()
+                                ? "#4CAF50" // A more visually appealing green
+                                : "inherit",
+                          }}
+                        >
+                          {token}
+                        </span>
+                      );
                     })}
                 </div>
               ))}
