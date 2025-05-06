@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDailyPedantix } from "../context/DailyPedantixContext";
-import { submitGuess } from "../api";
+import { fetchDailyGame, submitGuess } from "../api";
 import { SidePanel } from "../components/SidePanel";
 
 export default function DailyPedantix() {
@@ -10,6 +10,10 @@ export default function DailyPedantix() {
   const handleGuess = async () => {
     if (!word || !data) return;
     const response = await submitGuess(data.gameId, word);
+    if (response.error) {
+      const newData = await fetchDailyGame();
+      updateData(newData);
+    }
     updateData(response);
     setWord("");
   };

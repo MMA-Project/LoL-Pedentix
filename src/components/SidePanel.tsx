@@ -1,4 +1,7 @@
+import { useDailyPedantix } from "../context/DailyPedantixContext";
+
 export const SidePanel = () => {
+  const { data } = useDailyPedantix();
   return (
     <div
       className="font-bold w-56 px-6 py-3 rounded-lg text-center h-fit"
@@ -9,10 +12,27 @@ export const SidePanel = () => {
     >
       <div>Jour n° {new Date().getDate()}</div>
       <div>Trouvé par 1000 personnes</div>
-      <div className="flex flex-row gap-2 justify-center mt-4">
-        <div className="">N°</div>
-        <div className="">Mot</div>
-      </div>
+      <table className="table-auto w-full mt-4">
+        <thead>
+          <tr>
+            <th className="px-2 py-1">N°</th>
+            <th className="px-2 py-1">Mot</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data?.triedWords
+            ?.slice(-5)
+            .reverse()
+            .map((word: string, index: number) => (
+              <tr key={index}>
+                <td className=" px-2 py-1 text-center">
+                  {data.triedWords.length - index}
+                </td>
+                <td className=" px-2 py-1 text-center">{word}</td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
     </div>
   );
 };
