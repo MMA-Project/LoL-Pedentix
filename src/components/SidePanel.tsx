@@ -1,7 +1,15 @@
+import { useState } from "react";
 import { useDailyPedantix } from "../context/DailyPedantixContext";
 
 export const SidePanel = () => {
   const { data } = useDailyPedantix();
+  const [showAll, setShowAll] = useState(false);
+
+  const words = data?.triedWords || [];
+  const displayedWords = showAll
+    ? words.slice().reverse()
+    : words.slice(-5).reverse();
+
   return (
     <div
       className="font-bold w-56 px-6 py-3 rounded-lg text-center h-fit"
@@ -20,28 +28,30 @@ export const SidePanel = () => {
           </tr>
         </thead>
         <tbody>
-          {data?.triedWords
-            ?.slice(-5)
-            .reverse()
-            .map((word: string, index: number) => (
-              <tr key={index}>
-                <td className=" px-2 py-1 text-center">
-                  {data.triedWords.length - index}
-                </td>
-                <td className=" px-2 py-1 text-center">{word}</td>
-              </tr>
-            ))}
+          {displayedWords.map((word: string, index: number) => (
+            <tr key={index}>
+              <td className="px-2 py-1 text-center">{words.length - index}</td>
+              <td className="px-2 py-1 text-center">{word}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
-      <button
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        onClick={() => {
-          const allWords = data?.triedWords || [];
-          alert("Tous les mots :\n" + allWords.join(", "));
-        }}
-      >
-        Afficher tous les mots
-      </button>
+      {!showAll && words.length > 5 && (
+        <button
+          onClick={() => setShowAll(true)}
+          className="mt-2 text-[#af9767] hover:text-white text-sm"
+        >
+          ↓ Voir tous les mots
+        </button>
+      )}
+      {showAll && (
+        <button
+          onClick={() => setShowAll(false)}
+          className="mt-2 text-[#af9767] hover:text-white text-sm"
+        >
+          ↑ Voir moins
+        </button>
+      )}
     </div>
   );
 };
