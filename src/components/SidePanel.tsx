@@ -33,6 +33,15 @@ export const SidePanel = () => {
             ))}
         </tbody>
       </table>
+      <button
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        onClick={() => {
+          const allWords = data?.triedWords || [];
+          alert("Tous les mots :\n" + allWords.join(", "));
+        }}
+      >
+        Afficher tous les mots
+      </button>
     </div>
   );
 };
