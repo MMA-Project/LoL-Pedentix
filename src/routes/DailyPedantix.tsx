@@ -129,7 +129,7 @@ export default function DailyPedantix() {
                               </span>
                             );
                           }
-
+                          // Cas d'un mot entre accolades
                           if (token.startsWith("{") && token.endsWith("}")) {
                             const cleanToken = token.slice(1, -1); // enlever les crochets
                             return (
@@ -144,7 +144,7 @@ export default function DailyPedantix() {
                                       : "",
                                 }}
                               >
-                                {cleanToken}
+                                {"~" + cleanToken}
                               </span>
                             );
                           }

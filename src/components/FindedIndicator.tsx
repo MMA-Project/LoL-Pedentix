@@ -48,9 +48,9 @@ export function FindedIndicator({
       {Array.from({ length: numberOfSynonymsInText }).map((_, index) => (
         <div key={index}>🟧</div>
       ))}
-      {numberOfGuessedWordInText <= 0 && numberOfSynonymsInText <= 0 && (
-        <div>🟥</div>
-      )}
+      {numberOfGuessedWordInText <= 0 &&
+        numberOfSynonymsInText <= 0 &&
+        numberOfAlmostInText <= 0 && <div>🟥</div>}
     </div>
   );
 }
