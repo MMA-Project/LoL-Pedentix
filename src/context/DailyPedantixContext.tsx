@@ -6,20 +6,11 @@ import {
   useState,
 } from "react";
 import { fetchDailyGame, fetchGameById } from "../api";
-
-interface DailyPedantixData {
-  gameId: string;
-  seed: string;
-  guessed: boolean;
-  text: string;
-  triedWords: string[];
-  image?: string;
-  title?: string;
-}
+import { PedantixData } from "../models/PedantixData";
 
 interface DailyPedantixContextType {
-  data: DailyPedantixData | null;
-  updateData: (data: DailyPedantixData) => void;
+  data: PedantixData | null;
+  updateData: (data: PedantixData) => void;
 }
 
 // 👇 ici on crée bien le contexte avec le bon type
@@ -33,9 +24,9 @@ export const DailyPedantixProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const [data, setData] = useState<DailyPedantixData | null>(null);
+  const [data, setData] = useState<PedantixData | null>(null);
 
-  const updateData = (newData: DailyPedantixData) => {
+  const updateData = (newData: PedantixData) => {
     setData(newData);
     localStorage.setItem("dailyPedantixData", JSON.stringify(newData));
   };

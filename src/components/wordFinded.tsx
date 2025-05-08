@@ -1,3 +1,5 @@
+import { useDailyPedantix } from "../context/DailyPedantixContext";
+
 export function WordFinded({
   word,
   lastTriedWord,
@@ -5,13 +7,18 @@ export function WordFinded({
   word: string;
   lastTriedWord: string;
 }) {
+  const { data } = useDailyPedantix();
   return (
     <span
       style={{
-        color:
-          word.toLowerCase() === lastTriedWord.toLowerCase()
-            ? "#4CAF50"
-            : "inherit",
+        color: data?.wordTriedWithGuessed
+          .find(
+            (item) =>
+              item.wordTried.toLowerCase() === lastTriedWord.toLowerCase()
+          )
+          ?.wordsGuessed.includes(word.toLowerCase())
+          ? "#4CAF50"
+          : "inherit",
       }}
     >
       {word}

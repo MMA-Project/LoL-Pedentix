@@ -3,6 +3,7 @@ import { useDailyPedantix } from "../context/DailyPedantixContext";
 import { fetchDailyGame, submitGuess } from "../api";
 import { SidePanel } from "../components/SidePanel";
 import { WordFinded } from "../components/wordFinded";
+import { FindedIndicator } from "../components/FindedIndicator";
 
 export default function DailyPedantix() {
   const { data, updateData } = useDailyPedantix();
@@ -23,7 +24,7 @@ export default function DailyPedantix() {
   };
 
   return (
-    <div className="min-h-screen p-4 flex items-center justify-center">
+    <div className="p-4 flex items-center justify-center">
       <div
         className="top-0 left-0 w-full h-full bg-cover bg-center fixed"
         style={{
@@ -45,7 +46,7 @@ export default function DailyPedantix() {
                 border: "2px solid #af9767",
               }}
             >
-              League of Legends Pétendix
+              League of Legends Pétandix du jour
             </div>
 
             {data && (
@@ -61,7 +62,7 @@ export default function DailyPedantix() {
                     ? "Bravo, vous avez trouvé le champion !"
                     : "Essayez de trouver le champion ! "}
                 </div>
-                {!data.guessed && (
+                <div className="flex flex-row gap-8 items-center pb-2">
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
@@ -71,12 +72,17 @@ export default function DailyPedantix() {
                     <input
                       type="text"
                       placeholder="Entrez un mot..."
-                      className="w-full p-3 mb-6 text-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                      className=" px-2 py-1 text-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
                       value={word}
                       onChange={(e) => setWord(e.target.value)}
+                      disabled={data.guessed}
                     />
                   </form>
-                )}
+                  <FindedIndicator
+                    text={data.text.split("\n").slice(0, 5)}
+                    lastTriedWord={lastTriedWord}
+                  />
+                </div>
                 {data.title ? (
                   <div className="flex items-center space-x-4 py-4">
                     {data.image && (
@@ -96,82 +102,76 @@ export default function DailyPedantix() {
                 ) : (
                   <div className=" w-32 h-8 bg-[#8f9194] rounded my-4"></div>
                 )}
-                {data.text.split("\n").map((line, lineIndex) => (
-                  <div key={lineIndex} className="mb-2">
-                    {line
-                      .match(/(\[.*?\]|[●’'\wÀ-ÿ]+|[.,!?;:]|\s+)/g)
-                      ?.map((token, index) => {
-                        // Cas d'un mot entre crochets
-                        if (token.startsWith("[") && token.endsWith("]")) {
-                          const cleanToken = token.slice(1, -1); // enlever les crochets
-                          return (
-                            <span
-                              key={index}
-                              className="inline-block align-baseline mx-[2px]"
-                            >
-                              <div
-                                className="relative inline-block h-4 bg-[#5e6063] rounded align-baseline items-center justify-center"
-                                style={{ width: `${cleanToken.length * 10}px` }}
+                {data.text
+                  .split("\n")
+                  .slice(0, 5)
+                  .map((line, lineIndex) => (
+                    <p key={lineIndex} className="mb-2 leading-8">
+                      {line
+                        .match(/(\[.*?\]|[{●\wÀ-ÿ}]+|[{}.,’'!?;:-]|\s+)/g)
+                        ?.map((token, index) => {
+                          // Cas d'un mot entre crochets
+                          if (token.startsWith("[") && token.endsWith("]")) {
+                            const cleanToken = token.slice(1, -1); // enlever les crochets
+                            return (
+                              <span
+                                key={index}
+                                className="inline bg-[#5e6063] rounded align-baseline items-center justify-center px-1"
+                                style={{
+                                  color:
+                                    cleanToken.toLowerCase() ===
+                                    lastTriedWord.toLowerCase()
+                                      ? "#FF8C00" // A more visible orange
+                                      : "",
+                                }}
                               >
-                                <span
-                                  className="absolute  text-sm top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                                  style={{
-                                    color:
-                                      cleanToken.toLowerCase() ===
-                                      lastTriedWord.toLowerCase()
-                                        ? "#FF8C00" // A more visible orange
-                                        : "",
-                                  }}
-                                >
-                                  {cleanToken}
-                                </span>
-                              </div>
-                            </span>
-                          );
-                        }
+                                {cleanToken}
+                              </span>
+                            );
+                          }
 
-                        // Cas des mots avec des ●
-                        if (token.includes("●")) {
-                          const parts = token.split(/(['’])/); // garde l’apostrophe
+                          if (token.startsWith("{") && token.endsWith("}")) {
+                            const cleanToken = token.slice(1, -1); // enlever les crochets
+                            return (
+                              <span
+                                key={index}
+                                className="inline bg-[#5e6063] rounded align-baseline items-center justify-center px-1"
+                                style={{
+                                  color:
+                                    cleanToken.toLowerCase() ===
+                                    lastTriedWord.toLowerCase()
+                                      ? "#40a9ff"
+                                      : "",
+                                }}
+                              >
+                                {cleanToken}
+                              </span>
+                            );
+                          }
 
+                          // Cas des mots avec des ●
+                          if (token.includes("●")) {
+                            return (
+                              <span
+                                key={index}
+                                className="inline bg-[#8f9194] rounded align-baseline text-[#ffffff00]"
+                              >
+                                {token}
+                              </span>
+                            );
+                          }
+
+                          // Sinon, texte normal
                           return (
-                            <span
+                            <WordFinded
                               key={index}
-                              className="inline-block align-baseline mx-[2px]"
-                            >
-                              {parts.map((part, i) =>
-                                part.includes("●") ? (
-                                  <div
-                                    key={i}
-                                    className="inline-block h-4 bg-[#8f9194] rounded align-baseline"
-                                    style={{
-                                      width: `${part.length * 8}px`,
-                                      marginLeft: i > 0 ? "2px" : 0,
-                                    }}
-                                  ></div>
-                                ) : (
-                                  <WordFinded
-                                    key={i}
-                                    word={part}
-                                    lastTriedWord={lastTriedWord}
-                                  />
-                                )
-                              )}
-                            </span>
+                              word={token}
+                              lastTriedWord={lastTriedWord}
+                            />
                           );
-                        }
-
-                        // Sinon, texte normal
-                        return (
-                          <WordFinded
-                            key={index}
-                            word={token}
-                            lastTriedWord={lastTriedWord}
-                          />
-                        );
-                      })}
-                  </div>
-                ))}
+                        })}
+                    </p>
+                  ))}
               </div>
             )}
           </div>
