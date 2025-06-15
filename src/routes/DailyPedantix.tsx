@@ -46,7 +46,7 @@ export default function DailyPedantix() {
                 border: "2px solid #af9767",
               }}
             >
-              League of Legends Pétandix du jour
+              League of Legends Pédantix du jour
             </div>
 
             {data && (
