@@ -1,19 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDailyPedantix } from "../context/DailyPedantixContext";
 import { fetchDailyGame, submitGuess } from "../api";
 import { SidePanel } from "../components/SidePanel";
 import { WordFinded } from "../components/wordFinded";
 import { FindedIndicator } from "../components/FindedIndicator";
+import { useSearchParams } from "react-router";
+import { socket, useCoopRoom } from "../api/websocket";
+import { PedantixData } from "../models/PedantixData";
 
 export default function DailyPedantix() {
-  const { data, updateData } = useDailyPedantix();
+  const [searchParams] = useSearchParams();
+  const roomUrlId = searchParams.get("room");
+  const { data, updateData, roomId } = useDailyPedantix();
   const [word, setWord] = useState<string>("");
   const [lastTriedWord, setLastTriedWord] = useState<string>("");
+  const { joinRoom } = useCoopRoom();
+
+  useEffect(() => {
+    if (roomUrlId && data?.gameId && roomId !== roomUrlId) {
+      joinRoom(roomUrlId, data.gameId);
+    }
+  }, [roomUrlId, data?.gameId]);
+
+  useEffect(() => {
+    socket.on("new-guess", ({ game }: { game: PedantixData }) => {
+      console.log("New guess received:", game);
+      updateData(game);
+    });
+
+    return () => {
+      socket.off("new-guess");
+    };
+  }, []);
 
   const handleGuess = async () => {
     if (!word || !data) return;
     try {
       const response = await submitGuess(data.gameId, word);
+      console.log("Response from server:", response);
+      socket.emit("new-guess", response);
       updateData(response);
       setLastTriedWord(word);
       setWord("");

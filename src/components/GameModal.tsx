@@ -1,5 +1,6 @@
 import Modal from "react-modal";
 import { useDailyPedantix } from "../context/DailyPedantixContext";
+import { useCoopRoom } from "../api/websocket";
 
 type ModalProps = {
   isOpen: boolean;
@@ -9,6 +10,9 @@ type ModalProps = {
 
 export const GameModal = ({ isOpen, onClose, type }: ModalProps) => {
   const { history } = useDailyPedantix();
+  const { createRoom } = useCoopRoom();
+  const { data, roomId } = useDailyPedantix();
+
   return (
     <Modal
       isOpen={isOpen}
@@ -66,7 +70,21 @@ export const GameModal = ({ isOpen, onClose, type }: ModalProps) => {
       {type === "coop" && (
         <div>
           <h2>Coopération</h2>
-          <p>Unissez vos forces avec vos amis pour gagner ensemble !</p>
+          {data && !roomId ? (
+            <button
+              onClick={() => createRoom(data.gameId)}
+              className="btn-coop"
+            >
+              Créer une session
+            </button>
+          ) : (
+            <div>
+              <p>Partagez ce lien à vos amis pour jouer ensemble :</p>
+              <a className="underline font-extrabold">{`${
+                import.meta.env.VITE_FRONTEND_BASE_URL
+              }/LoL-Pedentix/#/daily?room=${roomId}`}</a>
+            </div>
+          )}
         </div>
       )}
     </Modal>
