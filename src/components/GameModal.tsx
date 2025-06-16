@@ -19,6 +19,9 @@ export const GameModal = ({ isOpen, onClose, type }: ModalProps) => {
         overlay: {
           backgroundColor: "rgba(30, 35, 40, 0.8)",
           backdropFilter: "blur(2px)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         },
         content: {
           backgroundColor: "#1e2328ee",
