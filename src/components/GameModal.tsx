@@ -9,6 +9,7 @@ type ModalProps = {
 
 export const GameModal = ({ isOpen, onClose, type }: ModalProps) => {
     const { history } = useDailyPedantix();
+    // console.log("sss")
     return (
         <Modal
             isOpen={isOpen}
@@ -69,8 +70,9 @@ export const GameModal = ({ isOpen, onClose, type }: ModalProps) => {
                         recherches.
                     </p>
                     <p>
-                        Il y a un nouveau champion à deviner chaque jour à <strong>00h UTC</strong>,
-                        et vous pouvez jouer à tout moment de la journée.
+                        Il y a un nouveau champion à deviner chaque jour à{" "}
+                        <strong>00h UTC</strong>, et vous pouvez jouer à tout
+                        moment de la journée.
                     </p>
                     <p>
                         Plus vous êtes proche, plus la température augmente !{" "}

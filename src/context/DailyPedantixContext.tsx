@@ -43,8 +43,8 @@ export const DailyPedantixProvider = ({
           const newHistory = await fetchHistory();
           setHistory(newHistory);
         }
-      } catch (error) {
-        console.error("Error fetching daily game:", error);
+      } catch {
+        // console.error("Error fetching daily game:", error);
         const newData = await fetchDailyGame();
         updateData(newData);
         const newHistory = await fetchHistory();

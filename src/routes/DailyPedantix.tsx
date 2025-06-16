@@ -17,7 +17,7 @@ export default function DailyPedantix() {
       updateData(response);
       setLastTriedWord(word);
       setWord("");
-    } catch (error) {
+    } catch {
       const newData = await fetchDailyGame();
       updateData(newData);
     }
