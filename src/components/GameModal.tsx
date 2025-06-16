@@ -10,7 +10,7 @@ type ModalProps = {
 
 export const GameModal = ({ isOpen, onClose, type }: ModalProps) => {
   const { history } = useDailyPedantix();
-  const { createRoom } = useCoopRoom();
+  const { createRoom, joinRoom } = useCoopRoom();
   const { data, roomId } = useDailyPedantix();
 
   return (
@@ -71,18 +71,30 @@ export const GameModal = ({ isOpen, onClose, type }: ModalProps) => {
         <div>
           <h2>Coopération</h2>
           {data && !roomId ? (
-            <button
-              onClick={() => createRoom(data.gameId)}
-              className="btn-coop"
-            >
-              Créer une session
-            </button>
-          ) : (
             <div>
-              <p>Partagez ce lien à vos amis pour jouer ensemble :</p>
-              <a className="underline font-extrabold">{`${
-                import.meta.env.VITE_FRONTEND_BASE_URL
-              }/LoL-Pedentix/#/daily?room=${roomId}`}</a>
+              <button
+                onClick={() => createRoom(data.gameId)}
+                className="btn-coop"
+              >
+                Créer une session
+              </button>
+              <p>Ou rejoignez une session existante :</p>
+              <input
+                type="text"
+                placeholder="Entrez l'ID de la session"
+                className=" px-2 py-1 text-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    const value = (e.target as HTMLInputElement).value.trim();
+                    joinRoom(value, data.gameId);
+                  }
+                }}
+              />
+            </div>
+          ) : (
+            <div className="flex flex-col">
+              <p>Partagez ce code à vos amis pour jouer ensemble :</p>
+              <a className="underline font-extrabold">{roomId}</a>
             </div>
           )}
         </div>

@@ -21,7 +21,15 @@ export function useCoopRoom() {
 
   const joinRoom = (roomId: string, gameId: string) => {
     socket.emit("join-room", { roomId, gameId }, ({ roomId }: any) => {
+      if (!roomId) {
+        console.error("Failed to join room");
+        searchParams.delete("room");
+        setSearchParams(searchParams);
+        return;
+      }
       setRoomId(roomId);
+      searchParams.set("room", roomId);
+      setSearchParams(searchParams);
       console.log("Joined room:", roomId);
     });
   };

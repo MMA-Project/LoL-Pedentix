@@ -15,6 +15,7 @@ interface DailyPedantixContextType {
   history: HistoryRecord[];
   roomId: string | null;
   setRoomId: (roomId: string | null) => void;
+  setHistory: (history: HistoryRecord[]) => void;
 }
 
 export const DailyPedantixContext = createContext<DailyPedantixContextType>(
@@ -59,7 +60,7 @@ export const DailyPedantixProvider = ({
 
   return (
     <DailyPedantixContext.Provider
-      value={{ data, updateData, history, roomId, setRoomId }}
+      value={{ data, updateData, history, roomId, setRoomId, setHistory }}
     >
       {children}
     </DailyPedantixContext.Provider>
