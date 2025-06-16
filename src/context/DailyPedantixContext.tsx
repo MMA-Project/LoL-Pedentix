@@ -5,26 +5,27 @@ import {
   useEffect,
   useState,
 } from "react";
-import { fetchDailyGame, fetchGameById } from "../api";
+import { fetchDailyGame, fetchGameById, fetchHistory } from "../api";
 import { PedantixData } from "../models/PedantixData";
+import HistoryRecord from "../models/History";
 
 interface DailyPedantixContextType {
   data: PedantixData | null;
   updateData: (data: PedantixData) => void;
+  history: HistoryRecord[];
 }
 
-// 👇 ici on crée bien le contexte avec le bon type
 export const DailyPedantixContext = createContext<DailyPedantixContextType>(
   {} as DailyPedantixContextType
 );
 
-// 👇 le provider doit avoir un nom différent du contexte
 export const DailyPedantixProvider = ({
   children,
 }: {
   children: ReactNode;
 }) => {
   const [data, setData] = useState<PedantixData | null>(null);
+  const [history, setHistory] = useState<HistoryRecord[]>([]);
 
   const updateData = (newData: PedantixData) => {
     setData(newData);
@@ -39,23 +40,27 @@ export const DailyPedantixProvider = ({
           const parsedData = storedData ? JSON.parse(storedData) : null;
           await fetchGameById(parsedData.gameId);
           updateData(parsedData);
+          const newHistory = await fetchHistory();
+          setHistory(newHistory);
         }
       } catch (error) {
+        console.error("Error fetching daily game:", error);
         const newData = await fetchDailyGame();
         updateData(newData);
+        const newHistory = await fetchHistory();
+        setHistory(newHistory);
       }
     };
     fetchData();
-  }, [data]);
+  }, [data, history]);
 
   return (
-    <DailyPedantixContext.Provider value={{ data, updateData }}>
+    <DailyPedantixContext.Provider value={{ data, updateData, history }}>
       {children}
     </DailyPedantixContext.Provider>
   );
 };
 
-// 👇 le hook personnalisé
 export const useDailyPedantix = () => {
   const context = useContext(DailyPedantixContext);
   if (!context) {
