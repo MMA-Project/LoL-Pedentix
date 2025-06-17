@@ -112,57 +112,54 @@ export default function DailyPedantix() {
 
                 {!data.guessed && (
                   <div className="flex flex-row gap-4 items-center pb-2">
+                    <Select
+                      options={champOptions}
+                      styles={{
+                        control: (base) => ({
+                          ...base,
+                          backgroundColor: "#1e2328ee",
+                        }),
+                        menu: (base) => ({
+                          ...base,
+                          backgroundColor: "#1e2328ee",
+                          width: "max-content",
+                        }),
+                        indicatorSeparator: () => ({
+                          display: "none",
+                        }),
+                        valueContainer: (base) => ({
+                          ...base,
+                          display: "none",
+                        }),
+                        option: (base, { isFocused }) => {
+                          return {
+                            ...base,
+                            backgroundColor: isFocused
+                              ? "#2c3136"
+                              : "#1e2328ee",
+                            overflowX: "hidden",
+                          };
+                        },
+                      }}
+                      value={
+                        champOptions.find(
+                          (opt) =>
+                            opt.value.toLowerCase() === word.toLowerCase()
+                        ) || null
+                      }
+                      onChange={(option) => {
+                        if (option) {
+                          handleGuess(option.value);
+                        }
+                      }}
+                      isDisabled={data.guessed}
+                    />
                     <form
-                      className="flex flex-row gap-4"
                       onSubmit={(e) => {
                         e.preventDefault();
                         handleGuess();
                       }}
                     >
-                      <div className="flex items-center">
-                        <Select
-                          options={champOptions}
-                          styles={{
-                            control: (base) => ({
-                              ...base,
-                              backgroundColor: "#1e2328ee",
-                            }),
-                            menu: (base) => ({
-                              ...base,
-                              backgroundColor: "#1e2328ee",
-                              width: "max-content",
-                            }),
-                            indicatorSeparator: () => ({
-                              display: "none",
-                            }),
-                            valueContainer: (base) => ({
-                              ...base,
-                              display: "none",
-                            }),
-                            option: (base, { isFocused }) => {
-                              return {
-                                ...base,
-                                backgroundColor: isFocused
-                                  ? "#2c3136"
-                                  : "#1e2328ee",
-                                overflowX: "hidden",
-                              };
-                            },
-                          }}
-                          value={
-                            champOptions.find(
-                              (opt) =>
-                                opt.value.toLowerCase() === word.toLowerCase()
-                            ) || null
-                          }
-                          onChange={(option) => {
-                            if (option) {
-                              handleGuess(option.value);
-                            }
-                          }}
-                          isDisabled={data.guessed}
-                        />
-                      </div>
                       <input
                         type="text"
                         placeholder={lastTriedWord ?? "Entrez un mot..."}
