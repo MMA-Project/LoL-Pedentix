@@ -25,6 +25,11 @@ export async function fetchHistory(): Promise<HistoryRecord[]> {
   return await handleResponse(response);
 }
 
+export async function fetchChampions(): Promise<string[]> {
+  const response = await fetch(`${API_BASE_URL}/api/game/champions`);
+  return await handleResponse(response);
+}
+
 export async function submitGuess(
   gameId: string,
   word: string

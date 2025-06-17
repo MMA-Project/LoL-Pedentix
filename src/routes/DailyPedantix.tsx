@@ -7,11 +7,14 @@ import { FindedIndicator } from "../components/FindedIndicator";
 import { useSearchParams } from "react-router";
 import { socket, useCoopRoom } from "../api/websocket";
 import { PedantixData } from "../models/PedantixData";
+import Select from "react-select";
+import { getChampionValueForImage } from "../utils/champions";
 
 export default function DailyPedantix() {
   const [searchParams] = useSearchParams();
   const roomUrlId = searchParams.get("room");
-  const { data, updateData, roomId, setHistory } = useDailyPedantix();
+  const { data, updateData, roomId, setHistory, champions } =
+    useDailyPedantix();
   const [word, setWord] = useState<string>("");
   const [lastTriedWord, setLastTriedWord] = useState<string>("");
   const { joinRoom } = useCoopRoom();
@@ -24,7 +27,6 @@ export default function DailyPedantix() {
 
   useEffect(() => {
     socket.on("new-guess", ({ game }: { game: PedantixData }) => {
-      console.log("New guess received:", game);
       updateData(game);
     });
 
@@ -33,14 +35,16 @@ export default function DailyPedantix() {
     };
   }, []);
 
-  const handleGuess = async () => {
-    if (!word || !data) return;
+  const handleGuess = async (value?: string) => {
+    const guess = value || word.trim().toLowerCase();
+    if (!guess || !data) return;
     try {
-      const response = await submitGuess(data.gameId, word);
-      console.log("Guess submitted:", response);
-      socket.emit("new-guess", response);
+      const response = await submitGuess(data.gameId, guess);
+      if (roomId) {
+        socket.emit("new-guess", response);
+      }
       updateData(response);
-      setLastTriedWord(word);
+      setLastTriedWord(guess);
       setWord("");
       const newHistory = await fetchHistory();
       setHistory(newHistory);
@@ -49,6 +53,22 @@ export default function DailyPedantix() {
       updateData(newData);
     }
   };
+
+  const champOptions = champions.map((champion) => ({
+    value: champion,
+    label: (
+      <div className="flex items-center gap-2">
+        <img
+          src={`https://ddragon.leagueoflegends.com/cdn/15.8.1/img/champion/${getChampionValueForImage(
+            champion
+          )}.png`}
+          alt={champion}
+          className="w-5 h-5"
+        />
+        {champion.charAt(0).toUpperCase() + champion.slice(1)}
+      </div>
+    ),
+  }));
 
   return (
     <div className="p-4 flex items-center justify-center">
@@ -91,13 +111,58 @@ export default function DailyPedantix() {
                 </div>
 
                 {!data.guessed && (
-                  <div className="flex flex-row gap-8 items-center pb-2">
+                  <div className="flex flex-row gap-4 items-center pb-2">
                     <form
+                      className="flex flex-row gap-4"
                       onSubmit={(e) => {
                         e.preventDefault();
                         handleGuess();
                       }}
                     >
+                      <div className="flex items-center">
+                        <Select
+                          options={champOptions}
+                          styles={{
+                            control: (base) => ({
+                              ...base,
+                              backgroundColor: "#1e2328ee",
+                            }),
+                            menu: (base) => ({
+                              ...base,
+                              backgroundColor: "#1e2328ee",
+                              width: "max-content",
+                            }),
+                            indicatorSeparator: () => ({
+                              display: "none",
+                            }),
+                            valueContainer: (base) => ({
+                              ...base,
+                              display: "none",
+                            }),
+                            option: (base, { isFocused }) => {
+                              return {
+                                ...base,
+                                backgroundColor: isFocused
+                                  ? "#2c3136"
+                                  : "#1e2328ee",
+                                overflowX: "hidden",
+                              };
+                            },
+                          }}
+                          value={
+                            champOptions.find(
+                              (opt) =>
+                                opt.value.toLowerCase() === word.toLowerCase()
+                            ) || null
+                          }
+                          onChange={(option) => {
+                            if (option) {
+                              handleGuess(option.value);
+                            }
+                          }}
+                          isDisabled={data.guessed}
+                        />
+                      </div>
                       <input
                         type="text"
                         placeholder={lastTriedWord ?? "Entrez un mot..."}
@@ -130,7 +195,28 @@ export default function DailyPedantix() {
                     </div>
                   </div>
                 ) : (
-                  <div className=" w-32 h-8 bg-[#8f9194] rounded my-4"></div>
+                  <>
+                    <div className="flex flex-row flex-wrap">
+                      {data.triedWords.map((triedWord) => {
+                        const champion = champions.find(
+                          (champ) =>
+                            champ.toLowerCase() === triedWord.toLowerCase()
+                        );
+                        return champion ? (
+                          <img
+                            key={champion}
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.8.1/img/champion/${getChampionValueForImage(
+                              champion
+                            )}.png`}
+                            alt={champion}
+                            className="w-10 h-10 m-1 rounded border-2 border-[#d72222] shadow-lg"
+                            title={champion}
+                          />
+                        ) : null;
+                      })}
+                    </div>
+                    <div className=" w-32 h-8 bg-[#8f9194] rounded my-4"></div>
+                  </>
                 )}
                 {data.text
                   .split("\n")
