@@ -13,6 +13,9 @@ interface DailyPedantixContextType {
   data: PedantixData | null;
   updateData: (data: PedantixData) => void;
   history: HistoryRecord[];
+  roomId: string | null;
+  setRoomId: (roomId: string | null) => void;
+  setHistory: (history: HistoryRecord[]) => void;
 }
 
 export const DailyPedantixContext = createContext<DailyPedantixContextType>(
@@ -26,6 +29,7 @@ export const DailyPedantixProvider = ({
 }) => {
   const [data, setData] = useState<PedantixData | null>(null);
   const [history, setHistory] = useState<HistoryRecord[]>([]);
+  const [roomId, setRoomId] = useState<string | null>(null);
 
   const updateData = (newData: PedantixData) => {
     setData(newData);
@@ -55,7 +59,9 @@ export const DailyPedantixProvider = ({
   }, [data, history]);
 
   return (
-    <DailyPedantixContext.Provider value={{ data, updateData, history }}>
+    <DailyPedantixContext.Provider
+      value={{ data, updateData, history, roomId, setRoomId, setHistory }}
+    >
       {children}
     </DailyPedantixContext.Provider>
   );

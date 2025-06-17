@@ -1,22 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDailyPedantix } from "../context/DailyPedantixContext";
-import { fetchDailyGame, submitGuess } from "../api";
+import { fetchDailyGame, fetchHistory, submitGuess } from "../api";
 import { SidePanel } from "../components/SidePanel";
 import { WordFinded } from "../components/wordFinded";
 import { FindedIndicator } from "../components/FindedIndicator";
+import { useSearchParams } from "react-router";
+import { socket, useCoopRoom } from "../api/websocket";
+import { PedantixData } from "../models/PedantixData";
 
 export default function DailyPedantix() {
-  const { data, updateData } = useDailyPedantix();
+  const [searchParams] = useSearchParams();
+  const roomUrlId = searchParams.get("room");
+  const { data, updateData, roomId, setHistory } = useDailyPedantix();
   const [word, setWord] = useState<string>("");
   const [lastTriedWord, setLastTriedWord] = useState<string>("");
+  const { joinRoom } = useCoopRoom();
+
+  useEffect(() => {
+    if (roomUrlId && data?.gameId && roomId !== roomUrlId) {
+      joinRoom(roomUrlId, data.gameId);
+    }
+  }, [roomUrlId, data?.gameId]);
+
+  useEffect(() => {
+    socket.on("new-guess", ({ game }: { game: PedantixData }) => {
+      console.log("New guess received:", game);
+      updateData(game);
+    });
+
+    return () => {
+      socket.off("new-guess");
+    };
+  }, []);
 
   const handleGuess = async () => {
     if (!word || !data) return;
     try {
       const response = await submitGuess(data.gameId, word);
+      console.log("Guess submitted:", response);
+      socket.emit("new-guess", response);
       updateData(response);
       setLastTriedWord(word);
       setWord("");
+      const newHistory = await fetchHistory();
+      setHistory(newHistory);
     } catch (error) {
       const newData = await fetchDailyGame();
       updateData(newData);
@@ -62,27 +89,30 @@ export default function DailyPedantix() {
                     ? "Bravo, vous avez trouvé le champion !"
                     : "Essayez de trouver le champion ! "}
                 </div>
-                <div className="flex flex-row gap-8 items-center pb-2">
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      handleGuess();
-                    }}
-                  >
-                    <input
-                      type="text"
-                      placeholder="Entrez un mot..."
-                      className=" px-2 py-1 text-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                      value={word}
-                      onChange={(e) => setWord(e.target.value)}
-                      disabled={data.guessed}
+
+                {!data.guessed && (
+                  <div className="flex flex-row gap-8 items-center pb-2">
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        handleGuess();
+                      }}
+                    >
+                      <input
+                        type="text"
+                        placeholder={lastTriedWord ?? "Entrez un mot..."}
+                        className=" px-2 py-1 text-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        value={word}
+                        onChange={(e) => setWord(e.target.value)}
+                        disabled={data.guessed}
+                      />
+                    </form>
+                    <FindedIndicator
+                      text={data.text.split("\n").slice(0, 5)}
+                      lastTriedWord={lastTriedWord}
                     />
-                  </form>
-                  <FindedIndicator
-                    text={data.text.split("\n").slice(0, 5)}
-                    lastTriedWord={lastTriedWord}
-                  />
-                </div>
+                  </div>
+                )}
                 {data.title ? (
                   <div className="flex items-center space-x-4 py-4">
                     {data.image && (
