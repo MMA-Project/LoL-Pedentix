@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
 
+npm audit --audit-level=moderate || exit 1
 npm run lint || exit 1
