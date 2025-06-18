@@ -24,6 +24,7 @@ jobs:
         run: npm audit --audit-level=moderate
   build:
     name: Build
+    needs: audit
     runs-on: ubuntu-latest
 
     steps:
