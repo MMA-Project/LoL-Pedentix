@@ -54,21 +54,23 @@ export default function DailyPedantix() {
     }
   };
 
-  const champOptions = champions.map((champion) => ({
-    value: champion,
-    label: (
-      <div className="flex items-center gap-2">
-        <img
-          src={`https://ddragon.leagueoflegends.com/cdn/15.8.1/img/champion/${getChampionValueForImage(
-            champion
-          )}.png`}
-          alt={champion}
-          className="w-5 h-5"
-        />
-        {champion.charAt(0).toUpperCase() + champion.slice(1)}
-      </div>
-    ),
-  }));
+  const champOptions = champions
+    .filter((champion) => !data?.triedWords.includes(champion))
+    .map((champion) => ({
+      value: champion,
+      label: (
+        <div className="flex items-center gap-2">
+          <img
+            src={`https://ddragon.leagueoflegends.com/cdn/15.8.1/img/champion/${getChampionValueForImage(
+              champion
+            )}.png`}
+            alt={champion}
+            className="w-5 h-5"
+          />
+          {champion.charAt(0).toUpperCase() + champion.slice(1)}
+        </div>
+      ),
+    }));
 
   return (
     <div className="p-4 flex items-center justify-center">
@@ -83,11 +85,11 @@ export default function DailyPedantix() {
         }}
       />
       {data && (
-        <div className="text-white p-8 w-full flex flex-row gap-10 animate-fade animate-ease-in-out">
+        <div className="text-white p-8 w-full flex flex-col md:flex-row  gap-10 animate-fade animate-ease-in-out">
           <SidePanel />
           <div>
             <div
-              className="text-3xl font-bold px-6 py-3 rounded-lg mb-8 text-center"
+              className="hidden md:block text-3xl font-bold px-6 py-3 rounded-lg mb-8 text-center"
               style={{
                 backgroundColor: "#1e2328ee",
                 border: "2px solid #af9767",
@@ -106,7 +108,7 @@ export default function DailyPedantix() {
               >
                 <div className="text-lg mb-4">
                   {data.guessed
-                    ? "Bravo, vous avez trouvé le champion !"
+                    ? `Bravo, vous avez trouvé le champion en  ${data.triedWords.length} coup(s) !`
                     : "Essayez de trouver le champion ! "}
                 </div>
 
@@ -141,12 +143,6 @@ export default function DailyPedantix() {
                           };
                         },
                       }}
-                      value={
-                        champOptions.find(
-                          (opt) =>
-                            opt.value.toLowerCase() === word.toLowerCase()
-                        ) || null
-                      }
                       onChange={(option) => {
                         if (option) {
                           handleGuess(option.value);

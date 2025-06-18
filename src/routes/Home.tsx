@@ -22,10 +22,7 @@ export const Home = () => {
             Trouver le champion avec son histoire
           </div>
         </div>
-        <div
-          className="relative flex flex-col clickable"
-          onClick={() => navigate("1vs1")}
-        >
+        <div className="relative flex flex-col filter grayscale">
           <img src={selectImage} alt="select 1vs1" className="h-20 " />
           <div className="absolute left-26 top-2 text-white text-3xl">1vs1</div>
           <div className="absolute left-26 bottom-5 text-white text-sm">

@@ -49,7 +49,7 @@ export const SidePanel = () => {
         <div className="flex justify-around mb-4">
           <button
             aria-label="Informations"
-            className="text-[#af9767] hover:text-white text-2xl mx-2"
+            className="text-[#af9767] hover:text-white text-2xl mx-2 cursor-pointer"
             onClick={() => {
               openModal("info");
             }}
@@ -61,7 +61,7 @@ export const SidePanel = () => {
           </button>
           <button
             aria-label="Historique"
-            className="text-[#af9767] hover:text-white text-2xl mx-2"
+            className="text-[#af9767] hover:text-white text-2xl mx-2 cursor-pointer"
             onClick={() => {
               openModal("history");
             }}
@@ -73,7 +73,7 @@ export const SidePanel = () => {
           </button>
           <button
             aria-label="Coop"
-            className="text-[#af9767] hover:text-white text-2xl mx-2 relative "
+            className="text-[#af9767] hover:text-white text-2xl mx-2 relative cursor-pointer"
             onClick={() => {
               openModal("coop");
             }}

@@ -119,10 +119,10 @@ export const GameModal = ({ isOpen, onClose, type }: ModalProps) => {
         <div>
           <h2>Coopération</h2>
           {data && !roomId ? (
-            <div>
+            <div className="flex flex-col gap-2 mt-4">
               <button
                 onClick={() => createRoom(data.gameId)}
-                className="btn-coop"
+                className="bg-[#af9767] text-white px-4 py-2 rounded-lg hover:bg-[#d1b18c] transition-colors"
               >
                 Créer une session
               </button>
@@ -140,7 +140,7 @@ export const GameModal = ({ isOpen, onClose, type }: ModalProps) => {
               />
             </div>
           ) : (
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-2 mt-4">
               <p>Partagez ce code à vos amis pour jouer ensemble :</p>
               <a className="underline font-extrabold">{roomId}</a>
             </div>
