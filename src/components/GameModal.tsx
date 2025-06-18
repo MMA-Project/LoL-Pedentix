@@ -9,7 +9,6 @@ type ModalProps = {
 
 export const GameModal = ({ isOpen, onClose, type }: ModalProps) => {
     const { history } = useDailyPedantix();
-    // console.log("sss")
     return (
         <Modal
             isOpen={isOpen}
