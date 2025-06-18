@@ -1,7 +1,11 @@
 import { useNavigate } from "react-router";
 import logo from "../assets/logo.png";
 
-export const Header = ({ larger = false }) => {
+interface HeaderProps {
+  larger?: boolean;
+}
+
+export const Header = ({ larger = false }: HeaderProps) => {
   const navigate = useNavigate();
   return (
     <div className="flex justify-center items-center z-20">

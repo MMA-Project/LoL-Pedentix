@@ -48,7 +48,7 @@ export default function DailyPedantix() {
       setWord("");
       const newHistory = await fetchHistory();
       setHistory(newHistory);
-    } catch (error) {
+    } catch {
       const newData = await fetchDailyGame();
       updateData(newData);
     }

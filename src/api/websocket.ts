@@ -15,7 +15,6 @@ export function useCoopRoom() {
       setRoomId(roomId);
       searchParams.set("room", roomId);
       setSearchParams(searchParams);
-      console.log("Room created:", roomId);
     });
   };
 
@@ -30,7 +29,6 @@ export function useCoopRoom() {
       setRoomId(roomId);
       searchParams.set("room", roomId);
       setSearchParams(searchParams);
-      console.log("Joined room:", roomId);
     });
   };
 
