@@ -1,54 +1,98 @@
-# React + TypeScript + Vite
+# 🎮 Frontend – League of Legends Pédantix
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interface web du jeu **Pédantix version League of Legends**. Ce frontend permet aux joueurs de deviner le champion du jour à partir de sa page Wikipédia, avec un affichage interactif et progressif.
 
-Currently, two official plugins are available:
+NAUD Mattis SIMON Melvin CLENET Alexandre
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Sommaire
 
-## Expanding the ESLint configuration
+- [🎮 Frontend – League of Legends Pédantix](#-frontend--league-of-legends-pédantix)
+  - [NAUD Mattis SIMON Melvin CLENET Alexandre](#naud-mattis-simon-melvin-clenet-alexandre)
+  - [Sommaire](#sommaire)
+  - [Prérequis](#prérequis)
+  - [Installation](#installation)
+  - [Lancement du projet](#lancement-du-projet)
+  - [Scripts disponibles](#scripts-disponibles)
+    - [Structure du projet](#structure-du-projet)
+    - [Stack \& Technologies](#stack--technologies)
+  - [Tests \& Qualité](#tests--qualité)
+    - [Linting](#linting)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Prérequis
+
+- Node.js 18+
+- `npm`
+- (Optionnel) un IDE comme VSCode avec l’extension ESLint pour flag en temps réel
+
+---
+
+## Installation
+
+```bash
+git clone https://github.com/MMA-Project/LoL-Pedentix.git
+cd frontend
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Lancement du projet
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+En mode développement
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+npm run dev
 ```
+
+## Scripts disponibles
+
+| Script            | Description                         |
+| ----------------- | ----------------------------------- |
+| `npm run dev`     | Lance le serveur de dev Vite        |
+| `npm run build`   | Build le projet pour la prod        |
+| `npm run preview` | Lance un serveur local sur le build |
+| `npm run lint`    | Exécute ESLint sur les fichiers     |
+
+### Structure du projet
+
+```txt
+src/
+├── api/                         # Appels API vers le backend
+├── assets/                      # Images, icônes (logo, 404, boutons...)
+├── components/                  # Composants visuels (UI)
+├── context/                     # Contexte React pour le jeu quotidien
+├── models/                      # Interfaces TypeScript
+├── routes/                      # Pages principales (DailyPedantix, 404)
+├── utils/                       # Fonctions utilitaires (ex: texte)
+├── layout.tsx                   # Mise en page globale
+├── main.tsx                     # Entrée de l’app
+└── index.css                    # Styles globaux
+```
+
+### Stack & Technologies
+
+- React 18
+
+- Vite
+
+- Context API (gestion de l’état global)
+
+- Tailwind
+
+- TypeScript
+
+
+
+## Tests & Qualité
+
+### Linting
+```bash
+npm run lint
+```
+
+Le projet utilise :
+
+✅ Husky pour les hooks pre-commit
+
+✅ ESLint (flat config, minimaliste)
