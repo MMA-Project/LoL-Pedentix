@@ -5,7 +5,12 @@ import {
   useEffect,
   useState,
 } from "react";
-import { fetchDailyGame, fetchGameById, fetchHistory } from "../api";
+import {
+  fetchChampions,
+  fetchDailyGame,
+  fetchGameById,
+  fetchHistory,
+} from "../api";
 import { PedantixData } from "../models/PedantixData";
 import HistoryRecord from "../models/History";
 
@@ -13,6 +18,10 @@ interface DailyPedantixContextType {
   data: PedantixData | null;
   updateData: (data: PedantixData) => void;
   history: HistoryRecord[];
+  roomId: string | null;
+  setRoomId: (roomId: string | null) => void;
+  setHistory: (history: HistoryRecord[]) => void;
+  champions: string[];
 }
 
 export const DailyPedantixContext = createContext<DailyPedantixContextType>(
@@ -26,6 +35,8 @@ export const DailyPedantixProvider = ({
 }) => {
   const [data, setData] = useState<PedantixData | null>(null);
   const [history, setHistory] = useState<HistoryRecord[]>([]);
+  const [roomId, setRoomId] = useState<string | null>(null);
+  const [champions, setChampions] = useState<string[]>([]);
 
   const updateData = (newData: PedantixData) => {
     setData(newData);
@@ -42,6 +53,8 @@ export const DailyPedantixProvider = ({
           updateData(parsedData);
           const newHistory = await fetchHistory();
           setHistory(newHistory);
+          const newChampions = await fetchChampions();
+          setChampions(newChampions);
         }
       } catch {
         // console.error("Error fetching daily game:", error);
@@ -49,13 +62,25 @@ export const DailyPedantixProvider = ({
         updateData(newData);
         const newHistory = await fetchHistory();
         setHistory(newHistory);
+        const newChampions = await fetchChampions();
+        setChampions(newChampions);
       }
     };
     fetchData();
   }, [data, history]);
 
   return (
-    <DailyPedantixContext.Provider value={{ data, updateData, history }}>
+    <DailyPedantixContext.Provider
+      value={{
+        data,
+        updateData,
+        history,
+        roomId,
+        setRoomId,
+        setHistory,
+        champions,
+      }}
+    >
       {children}
     </DailyPedantixContext.Provider>
   );

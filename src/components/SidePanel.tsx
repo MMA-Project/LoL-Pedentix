@@ -1,15 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDailyPedantix } from "../context/DailyPedantixContext";
 import { CompletionIndicator } from "./CompletionIndicator";
 import { GameModal } from "./GameModal";
+import { socket } from "../api/websocket";
 
 export const SidePanel = () => {
-  const { data, history } = useDailyPedantix();
+  const { data, history, roomId } = useDailyPedantix();
   const [showAll, setShowAll] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modalType, setModalType] = useState<
     "info" | "history" | "coop" | null
   >(null);
+  const [playersCount, setPlayersCount] = useState<number>(1);
+
+  useEffect(() => {
+    socket.on("room-update", ({ size }) => {
+      setPlayersCount(size);
+    });
+
+    return () => {
+      socket.off("room-update");
+    };
+  }, []);
 
   const words = data?.triedWords || [];
   const displayedWords = showAll
@@ -37,7 +49,7 @@ export const SidePanel = () => {
         <div className="flex justify-around mb-4">
           <button
             aria-label="Informations"
-            className="text-[#af9767] hover:text-white text-2xl mx-2"
+            className="text-[#af9767] hover:text-white text-2xl mx-2 cursor-pointer"
             onClick={() => {
               openModal("info");
             }}
@@ -49,7 +61,7 @@ export const SidePanel = () => {
           </button>
           <button
             aria-label="Historique"
-            className="text-[#af9767] hover:text-white text-2xl mx-2"
+            className="text-[#af9767] hover:text-white text-2xl mx-2 cursor-pointer"
             onClick={() => {
               openModal("history");
             }}
@@ -61,7 +73,7 @@ export const SidePanel = () => {
           </button>
           <button
             aria-label="Coop"
-            className="text-[#af9767] hover:text-white text-2xl mx-2"
+            className="text-[#af9767] hover:text-white text-2xl mx-2 relative cursor-pointer"
             onClick={() => {
               openModal("coop");
             }}
@@ -70,6 +82,14 @@ export const SidePanel = () => {
             <span role="img" aria-label="coop">
               🤝
             </span>
+            {roomId && playersCount && (
+              <span
+                className="absolute top-0 right-0 text-xs bg-[#af9767] text-black rounded-full px-1"
+                style={{ transform: "translate(50%,-50%)" }}
+              >
+                {playersCount}
+              </span>
+            )}
           </button>
         </div>
       </div>

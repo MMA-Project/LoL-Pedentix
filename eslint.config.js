@@ -14,7 +14,7 @@ export default defineConfig([
     rules: {
       'no-unused-vars': 'off',
       'no-undef': 'off',
-      'no-console': 'error',
+      'no-console': ["error", { allow: ["warn", "error"] }],
       'react/react-in-jsx-scope': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-extra-non-null-assertion': 'off',
