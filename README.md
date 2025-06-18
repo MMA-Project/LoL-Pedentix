@@ -1,22 +1,23 @@
 # 🎮 Frontend – League of Legends Pédantix
 
-Interface web du jeu **Pédantix version League of Legends**. Ce frontend permet aux joueurs de deviner le champion du jour à partir de sa page Wikipédia, avec un affichage interactif et progressif.
+Interface web du jeu **Pédantix version League of Legends**. Ce frontend permet aux joueurs de deviner le champion du jour à partir de sa page [Universe](https://universe.leagueoflegends.com/fr_FR/), avec un affichage interactif et progressif.
 
-NAUD Mattis SIMON Melvin CLENET Alexandre
+NAUD Mattis  
+SIMON Melvin  
+CLENET Alexandre  
+[Git Tasks](https://github.com/orgs/MMA-Project/projects/1/views/1)
+
 ---
 
 ## Sommaire
 
 - [🎮 Frontend – League of Legends Pédantix](#-frontend--league-of-legends-pédantix)
-  - [NAUD Mattis SIMON Melvin CLENET Alexandre](#naud-mattis-simon-melvin-clenet-alexandre)
   - [Sommaire](#sommaire)
   - [Prérequis](#prérequis)
   - [Installation](#installation)
   - [Lancement du projet](#lancement-du-projet)
-  - [Scripts disponibles](#scripts-disponibles)
     - [Structure du projet](#structure-du-projet)
     - [Stack \& Technologies](#stack--technologies)
-  - [Tests \& Qualité](#tests--qualité)
     - [Linting](#linting)
 
 ---
@@ -45,15 +46,6 @@ En mode développement
 npm run dev
 ```
 
-## Scripts disponibles
-
-| Script            | Description                         |
-| ----------------- | ----------------------------------- |
-| `npm run dev`     | Lance le serveur de dev Vite        |
-| `npm run build`   | Build le projet pour la prod        |
-| `npm run preview` | Lance un serveur local sur le build |
-| `npm run lint`    | Exécute ESLint sur les fichiers     |
-
 ### Structure du projet
 
 ```txt
@@ -78,13 +70,10 @@ src/
 
 - Context API (gestion de l’état global)
 
-- Tailwind
+- Tailwind (Insparation Graphique : [loldle](https://loldle.net/))
 
 - TypeScript
-
-
-
-## Tests & Qualité
+  
 
 ### Linting
 ```bash
