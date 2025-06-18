@@ -18,6 +18,7 @@ export default function DailyPedantix() {
   const [word, setWord] = useState<string>("");
   const [lastTriedWord, setLastTriedWord] = useState<string>("");
   const { joinRoom } = useCoopRoom();
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     if (roomUrlId && data?.gameId && roomId !== roomUrlId) {
@@ -37,8 +38,9 @@ export default function DailyPedantix() {
 
   const handleGuess = async (value?: string) => {
     const guess = value || word.trim().toLowerCase();
-    if (!guess || !data) return;
+    if (!guess || !data || submitting) return;
     try {
+      setSubmitting(true);
       const response = await submitGuess(data.gameId, guess);
       if (roomId) {
         socket.emit("new-guess", response);
@@ -48,9 +50,13 @@ export default function DailyPedantix() {
       setWord("");
       const newHistory = await fetchHistory();
       setHistory(newHistory);
+      setSubmitting(false);
     } catch {
       const newData = await fetchDailyGame();
       updateData(newData);
+      const newHistory = await fetchHistory();
+      setHistory(newHistory);
+      setSubmitting(false);
     }
   };
 
@@ -95,7 +101,7 @@ export default function DailyPedantix() {
                 border: "2px solid #af9767",
               }}
             >
-              League of Legends Pédantix du jour
+              Leaguentix du jour
             </div>
 
             {data && (
